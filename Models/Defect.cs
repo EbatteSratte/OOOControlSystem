@@ -38,9 +38,18 @@ namespace OOOControlSystem.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public List<string> AttachmentPaths { get; set; } = new List<string>();
+        public List<DefectHistoryEntry> History { get; set; } = new List<DefectHistoryEntry>();
 
         public Project Project { get; set; } = null!;
         public User? AssignedUser { get; set; }
         public User Reporter { get; set; } = null!;
+        public class DefectHistoryEntry
+        {
+            public DefectStatus Status { get; set; }
+            public DateTime ChangedAt { get; set; } = DateTime.UtcNow;
+            public int ChangedById { get; set; }
+            public string ChangedBy { get; set; } = string.Empty;
+        }
     }
 }
