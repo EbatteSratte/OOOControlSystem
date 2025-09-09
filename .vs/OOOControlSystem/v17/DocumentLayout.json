@@ -1,0 +1,224 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|c:\\users\\maksim\\source\\repos\\ooocontrolsystem\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|c:\\users\\maksim\\source\\repos\\ooocontrolsystem\\applicationcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|solutionrelative:applicationcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|c:\\users\\maksim\\source\\repos\\ooocontrolsystem\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|c:\\users\\maksim\\source\\repos\\ooocontrolsystem\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|solutionrelative:services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|c:\\users\\maksim\\source\\repos\\ooocontrolsystem\\services\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|solutionrelative:services\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|c:\\users\\maksim\\source\\repos\\ooocontrolsystem\\models\\defect.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|solutionrelative:models\\defect.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|c:\\users\\maksim\\source\\repos\\ooocontrolsystem\\models\\project.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|solutionrelative:models\\project.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|c:\\users\\maksim\\source\\repos\\ooocontrolsystem\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|solutionrelative:models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|c:\\users\\maksim\\source\\repos\\ooocontrolsystem\\models\\enums\\projectstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|solutionrelative:models\\enums\\projectstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|c:\\users\\maksim\\source\\repos\\ooocontrolsystem\\models\\enums\\defectpriority.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|solutionrelative:models\\enums\\defectpriority.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|c:\\users\\maksim\\source\\repos\\ooocontrolsystem\\models\\enums\\defectstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|solutionrelative:models\\enums\\defectstatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|c:\\users\\maksim\\source\\repos\\ooocontrolsystem\\models\\enums\\userrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E50C44EF-B949-4038-977E-5C2BD04D8935}|OOOControlSystem.csproj|solutionrelative:models\\enums\\userrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 11,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AuthService.cs",
+              "DocumentMoniker": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\Services\\AuthService.cs",
+              "RelativeDocumentMoniker": "Services\\AuthService.cs",
+              "ToolTip": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\Services\\AuthService.cs",
+              "RelativeToolTip": "Services\\AuthService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T16:39:33.108Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ProjectStatus.cs",
+              "DocumentMoniker": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\Models\\Enums\\ProjectStatus.cs",
+              "RelativeDocumentMoniker": "Models\\Enums\\ProjectStatus.cs",
+              "ToolTip": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\Models\\Enums\\ProjectStatus.cs",
+              "RelativeToolTip": "Models\\Enums\\ProjectStatus.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T16:33:10.576Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "DefectPriority.cs",
+              "DocumentMoniker": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\Models\\Enums\\DefectPriority.cs",
+              "RelativeDocumentMoniker": "Models\\Enums\\DefectPriority.cs",
+              "ToolTip": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\Models\\Enums\\DefectPriority.cs",
+              "RelativeToolTip": "Models\\Enums\\DefectPriority.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T16:32:21.877Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "DefectStatus.cs",
+              "DocumentMoniker": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\Models\\Enums\\DefectStatus.cs",
+              "RelativeDocumentMoniker": "Models\\Enums\\DefectStatus.cs",
+              "ToolTip": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\Models\\Enums\\DefectStatus.cs",
+              "RelativeToolTip": "Models\\Enums\\DefectStatus.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T16:28:04.173Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "UserRole.cs",
+              "DocumentMoniker": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\Models\\Enums\\UserRole.cs",
+              "RelativeDocumentMoniker": "Models\\Enums\\UserRole.cs",
+              "ToolTip": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\Models\\Enums\\UserRole.cs",
+              "RelativeToolTip": "Models\\Enums\\UserRole.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T16:26:11.312Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Defect.cs",
+              "DocumentMoniker": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\Models\\Defect.cs",
+              "RelativeDocumentMoniker": "Models\\Defect.cs",
+              "ToolTip": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\Models\\Defect.cs",
+              "RelativeToolTip": "Models\\Defect.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAwwBUAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T16:13:54.319Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Project.cs",
+              "DocumentMoniker": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\Models\\Project.cs",
+              "RelativeDocumentMoniker": "Models\\Project.cs",
+              "ToolTip": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\Models\\Project.cs",
+              "RelativeToolTip": "Models\\Project.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T16:13:43.115Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Models\\User.cs",
+              "ToolTip": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\Models\\User.cs",
+              "RelativeToolTip": "Models\\User.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAgwBYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T16:13:31.708Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-09-09T16:11:28.7Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "TokenService.cs",
+              "DocumentMoniker": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\Services\\TokenService.cs",
+              "RelativeDocumentMoniker": "Services\\TokenService.cs",
+              "ToolTip": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\Services\\TokenService.cs",
+              "RelativeToolTip": "Services\\TokenService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T16:11:18.291Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ApplicationContext.cs",
+              "DocumentMoniker": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\ApplicationContext.cs",
+              "RelativeDocumentMoniker": "ApplicationContext.cs",
+              "ToolTip": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\ApplicationContext.cs",
+              "RelativeToolTip": "ApplicationContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T15:47:39.445Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\Maksim\\source\\repos\\OOOControlSystem\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-09T15:46:06.138Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
