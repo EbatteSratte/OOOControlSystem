@@ -18,11 +18,9 @@ namespace OOOControlSystem.Services
 
         public async Task<string> Register(RegisterDto registerDto, UserRole role = UserRole.Сustomer)
         {
-            // Проверяем, существует ли пользователь с таким email
             if (await _context.Users.AnyAsync(u => u.Email == registerDto.Email))
                 throw new Exception("Пользователь с таким email уже существует");
 
-            // Создаем нового пользователя
             var user = new User
             {
                 Email = registerDto.Email,
@@ -36,7 +34,6 @@ namespace OOOControlSystem.Services
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            // Создаем токен с ID пользователя (а не email)
             return _tokenService.CreateToken(user.Id, user.Role);
         }
 
