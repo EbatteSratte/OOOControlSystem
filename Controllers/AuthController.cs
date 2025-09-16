@@ -29,7 +29,7 @@ namespace OOOControlSystem.Controllers
                 return BadRequest(new { Message = ex.Message });
             }
         }
-        // POST: api/auth/change-password
+        // POST: api/auth/login
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
