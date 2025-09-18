@@ -46,6 +46,12 @@ namespace OOOControlSystem
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
+            modelBuilder.Entity<Project>()
+                .HasOne(p => p.Owner)
+                .WithMany(u => u.OwnedProjects)
+                .HasForeignKey(p => p.OwnerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Defect>(entity =>
             {
                 entity.HasKey(d => d.Id);

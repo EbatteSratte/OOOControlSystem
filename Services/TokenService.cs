@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using OOOControlSystem.Models;
 using OOOControlSystem.Models.Enums;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -9,18 +10,21 @@ namespace OOOControlSystem.Services
     public class TokenService
     {
         private readonly IConfiguration _config;
+        private readonly ApplicationContext _context;
 
-        public TokenService(IConfiguration config)
+        public TokenService(IConfiguration config, ApplicationContext context)
         {
             _config = config;
+            _context = context;
         }
 
-        public string CreateToken(int id, UserRole role)
+        public string CreateToken(int id, UserRole role, int tokenVersion)
         {
             var claims = new List<Claim>
             {
                 new Claim("userId", id.ToString()),
-                new Claim(ClaimTypes.Role, role.ToString())
+                new Claim(ClaimTypes.Role, role.ToString()),
+                new Claim("tokenVersion", tokenVersion.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
@@ -39,6 +43,15 @@ namespace OOOControlSystem.Services
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
+        }
+        public async Task InvalidateTokens(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user != null)
+            {
+                user.TokenVersion++;
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

@@ -32,6 +32,7 @@ namespace OOOControlSystem.Controllers
             var projects = await _context.Projects
                 .Include(p => p.Creator)
                 .Include(p => p.Defects)
+                .Include(p => p.Owner)
                 .Select(p => new
                 {
                     p.Id,
@@ -40,6 +41,7 @@ namespace OOOControlSystem.Controllers
                     Status = p.Status.ToString(),
                     p.CreatedAt,
                     Creator = new { p.Creator.Id, p.Creator.FullName },
+                    Owner = new { p.Owner.Id, p.Owner.FullName },
                 })
                 .ToListAsync();
 
@@ -53,6 +55,7 @@ namespace OOOControlSystem.Controllers
             var project = await _context.Projects
                 .Where(p => p.Id == id)
                 .Include(p => p.Creator)
+                .Include(p => p.Owner)
                 .Include(p => p.Defects)
                     .ThenInclude(d => d.Reporter)
                 .Include(p => p.Defects)
@@ -65,6 +68,7 @@ namespace OOOControlSystem.Controllers
                     Status = p.Status.ToString(),
                     p.CreatedAt,
                     Creator = new { p.Creator.Id, p.Creator.FullName, p.Creator.Email },
+                    Owner = new { p.Owner.Id, p.Owner.FullName },
                     Defects = p.Defects.Select(d => new
                     {
                         d.Id,
@@ -92,12 +96,17 @@ namespace OOOControlSystem.Controllers
         {
             var userId = int.Parse(User.FindFirst("userId")?.Value!);
 
+            var owner = await _context.Users.FindAsync(createDto.OwnerId);
+            if (owner == null)
+                return BadRequest(new { Message = "Владелец не найден" });
+
             var project = new Project
             {
                 Name = createDto.Name,
                 Description = createDto.Description,
                 Status = ProjectStatus.Active,
                 CreatedById = userId,
+                OwnerId = createDto.OwnerId,
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -136,7 +145,7 @@ namespace OOOControlSystem.Controllers
 
         // DELETE: api/projects/id
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Manager")]
+        //[Authorize(Roles = "Manager")]
         public async Task<IActionResult> DeleteProject(int id)
         {
             var project = await _context.Projects.FindAsync(id);

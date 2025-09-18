@@ -21,10 +21,14 @@ namespace OOOControlSystem.Models
         [Required]
         [ForeignKey("Creator")]
         public int CreatedById { get; set; }
+        [Required]
+        [ForeignKey("Owner")]
+        public int OwnerId { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public User Creator { get; set; } = null!;
+        public User Owner { get; set; } = null!;
         public List<Defect> Defects { get; set; } = new();
     }
 }

@@ -34,7 +34,7 @@ namespace OOOControlSystem.Services
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return _tokenService.CreateToken(user.Id, user.Role);
+            return _tokenService.CreateToken(user.Id, user.Role, user.TokenVersion);
         }
 
         public async Task<string> Login(LoginDto loginDto)
@@ -51,7 +51,7 @@ namespace OOOControlSystem.Services
             if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
                 throw new Exception("Неверный пароль");
 
-            return _tokenService.CreateToken(user.Id, user.Role);
+            return _tokenService.CreateToken(user.Id, user.Role, user.TokenVersion);
         }
     }
 }

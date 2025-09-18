@@ -1,5 +1,6 @@
 ﻿using OOOControlSystem.Models.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace OOOControlSystem.Models
 {
@@ -27,10 +28,16 @@ namespace OOOControlSystem.Models
 
         public bool IsActive { get; set; } = true;
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public int TokenVersion { get; set; } = 1;
 
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        [JsonIgnore]
         public List<Project> CreatedProjects { get; set; } = new();
+        [JsonIgnore]
+        public List<Project> OwnedProjects { get; set; } = new();
+        [JsonIgnore]
         public List<Defect> ReportedDefects { get; set; } = new();
+        [JsonIgnore]
         public List<Defect> AssignedDefects { get; set; } = new();
     }
 }

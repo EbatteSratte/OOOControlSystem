@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using OOOControlSystem.Dtos;
 using OOOControlSystem.Models;
 using OOOControlSystem.Models.Enums;
+using OOOControlSystem.Services;
 
 namespace OOOControlSystem.Controllers
 {
@@ -12,9 +13,11 @@ namespace OOOControlSystem.Controllers
     public class UsersController : Controller
     {
         private readonly ApplicationContext _context;
-        public UsersController(ApplicationContext applicationContext)
+        private readonly TokenService _tokenService;
+        public UsersController(ApplicationContext applicationContext, TokenService tokenService)
         {
             _context = applicationContext;
+            _tokenService = tokenService;
         }
 
         // GET: api/users/get-profile
@@ -28,6 +31,7 @@ namespace OOOControlSystem.Controllers
                 .Include(u => u.CreatedProjects)
                 .Include(u => u.ReportedDefects)
                 .Include(u => u.AssignedDefects)
+                .Include(u => u.OwnedProjects)
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null) return NotFound();
@@ -47,6 +51,7 @@ namespace OOOControlSystem.Controllers
                     .Include(u => u.CreatedProjects)
                     .Include(u => u.ReportedDefects)
                     .Include(u => u.AssignedDefects)
+                    .Include(u => u.OwnedProjects)
                     .FirstOrDefaultAsync();
 
                 if (user == null)
@@ -66,6 +71,7 @@ namespace OOOControlSystem.Controllers
                 .Include(u => u.CreatedProjects)
                 .Include(u => u.ReportedDefects)
                 .Include(u => u.AssignedDefects)
+                .Include(u => u.OwnedProjects)
                 .ToListAsync();
 
             var response = users.Select(u => MapUserToResponse(u, false)).ToList();
@@ -110,6 +116,7 @@ namespace OOOControlSystem.Controllers
                     userToUpdate.Role = newRole;
                 else
                     return BadRequest(new { Message = "Недопустимая роль" });
+                await _tokenService.InvalidateTokens(id);
             }
 
             try
@@ -147,6 +154,13 @@ namespace OOOControlSystem.Controllers
                 user.IsActive,
                 user.CreatedAt,
                 CreatedProjects = user.CreatedProjects.Select(p => new
+                {
+                    p.Id,
+                    p.Name,
+                    p.Status,
+                    p.CreatedAt
+                }).ToList(),
+                OwnedProjects = user.OwnedProjects.Select(p => new
                 {
                     p.Id,
                     p.Name,

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OOOControlSystem;
+using OOOControlSystem.Middleware;
 using OOOControlSystem.Services;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -60,5 +61,6 @@ app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.UseMiddleware<TokenValidationMiddleware>();
 
 app.Run();

@@ -9,5 +9,7 @@ namespace OOOControlSystem.Dtos
         public string Name { get; set; } = string.Empty;
 
         public string? Description { get; set; }
+        [Required]
+        public int OwnerId { get; set; }
     }
 }
