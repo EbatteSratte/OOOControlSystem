@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Npgsql;
 using OOOControlSystem;
 using OOOControlSystem.Middleware;
 using OOOControlSystem.Services;
@@ -9,14 +10,18 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var cs = builder.Configuration.GetConnectionString("DefaultConnection");
+var dsb = new NpgsqlDataSourceBuilder(cs);
+
+dsb.EnableDynamicJson();
+var dataSource = dsb.Build();
+
+builder.Services.AddDbContext<ApplicationContext>(opt => opt.UseNpgsql(dataSource));
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
-
-builder.Services.AddDbContext<ApplicationContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddCors(options =>
 {

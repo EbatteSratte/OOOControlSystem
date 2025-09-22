@@ -49,7 +49,7 @@ namespace OOOControlSystem.Models
             public DefectStatus Status { get; set; }
             public DateTime ChangedAt { get; set; } = DateTime.UtcNow;
             public int ChangedById { get; set; }
-            public string ChangedBy { get; set; } = string.Empty;
+            public string Description { get; set; } = string.Empty;
         }
     }
 }

@@ -11,14 +11,6 @@ namespace OOOControlSystem.Controllers
     [Route("api/[controller]")]
     public class ProjectsController : Controller
     {
-        /*
-         GET    /api/projects               - Получить список всех проектов
-         GET    /api/projects/{id}          - Получить данные конкретного проекта
-         POST   /api/projects               - Создать новый проект (только Manager)
-         PUT    /api/projects/{id}          - Обновить проект (только Manager)
-         DELETE /api/projects/{id}          - Удалить проект (только Manager)
-         GET    /api/projects/{id}/defects  - Получить все дефекты проекта
-         */
         private readonly ApplicationContext _context;
         public ProjectsController(ApplicationContext applicationContext)
         {
@@ -26,6 +18,7 @@ namespace OOOControlSystem.Controllers
         }
 
         // GET: api/projects
+        [Authorize(Roles = "Manager,Engineer")]
         [HttpGet]
         public async Task<ActionResult> GetProjects()
         {
@@ -49,6 +42,7 @@ namespace OOOControlSystem.Controllers
         }
 
         // GET: api/projects/id
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult> GetProject(int id)
         {
@@ -91,7 +85,7 @@ namespace OOOControlSystem.Controllers
 
         // POST: api/projects
         [HttpPost]
-        //[Authorize(Roles = "Customer")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> CreateProject(ProjectCreateDto createDto)
         {
             var userId = int.Parse(User.FindFirst("userId")?.Value!);
@@ -145,7 +139,7 @@ namespace OOOControlSystem.Controllers
 
         // DELETE: api/projects/id
         [HttpDelete("{id}")]
-        //[Authorize(Roles = "Manager")]
+        [Authorize(Roles = "Manager")]
         public async Task<IActionResult> DeleteProject(int id)
         {
             var project = await _context.Projects.FindAsync(id);

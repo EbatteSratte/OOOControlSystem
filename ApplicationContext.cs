@@ -16,6 +16,10 @@ namespace OOOControlSystem
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Defect>()
+                .Property(d => d.History)
+                .HasColumnType("jsonb");
+
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(u => u.Id);
