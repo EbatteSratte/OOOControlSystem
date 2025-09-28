@@ -12,9 +12,11 @@ namespace OOOControlSystem.Controllers
     public class DefectsController : Controller
     {
         private readonly ApplicationContext _context;
-        public DefectsController(ApplicationContext context)
+        private readonly IWebHostEnvironment _env;
+        public DefectsController(ApplicationContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
         // GET: api/defects
@@ -82,7 +84,7 @@ namespace OOOControlSystem.Controllers
         }
 
         // GET: api/defects/{id}
-        [Authorize(Roles = "Manager,Engineer")]
+        //[Authorize(Roles = "Manager,Engineer")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetDefect(int id)
         {
@@ -257,6 +259,119 @@ new Defect.DefectHistoryEntry{ Status = DefectStatus.New, ChangedAt = DateTime.U
             _context.Defects.Remove(defect);
             await _context.SaveChangesAsync();
             return Ok(new { Message = "Дефект удалён" });
+        }
+        /*
+        [HttpPost("{id}/photos")]
+        [RequestSizeLimit(50_000_000)]
+        public async Task<IActionResult> UploadPhotos(int id, [FromForm] List<IFormFile> files)
+        {
+            var defect = await _context.Defects.FindAsync(id);
+            if (defect == null)
+                return NotFound(new { Message = "Дефект не найден" });
+
+            if (files == null || files.Count == 0)
+                return BadRequest(new { Message = "Файлы не переданы" });
+
+            var allowedExt = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        { ".png", ".jpg", ".jpeg", ".gif", ".webp" };
+
+            var uploadsRoot = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "defects", id.ToString());
+            Directory.CreateDirectory(uploadsRoot);
+
+            var savedUrls = new List<string>();
+            foreach (var file in files)
+            {
+                if (file.Length <= 0) continue;
+
+                var ext = Path.GetExtension(file.FileName);
+                if (!allowedExt.Contains(ext))
+                    return BadRequest(new { Message = $"Недопустимый тип файла: {ext}" });
+
+                var uniqueName = $"{Guid.NewGuid():N}{ext}";
+                var absPath = Path.Combine(uploadsRoot, uniqueName);
+
+                using (var stream = System.IO.File.Create(absPath))
+                    await file.CopyToAsync(stream);
+
+                var relUrl = $"/uploads/defects/{id}/{uniqueName}";
+                savedUrls.Add(relUrl);
+            }
+
+            var current = defect.AttachmentPaths?.ToList() ?? new List<string>();
+            foreach (var url in savedUrls)
+                if (!current.Contains(url)) current.Add(url);
+            defect.AttachmentPaths = current;
+
+            defect.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
+            return Ok(new { Message = "Фото загружены", Files = savedUrls });
+        }
+        */
+        [HttpPost("{id}/attachments")]
+        [Authorize(Roles = "Manager,Engineer")]
+        public async Task<IActionResult> UploadAttachments(int id, [FromForm] List<IFormFile> files)
+        {
+            var defect = await _context.Defects.FindAsync(id);
+            if (defect == null) return NotFound();
+
+            if (defect.AttachmentPaths == null)
+                defect.AttachmentPaths = new List<string>();
+
+            var uploadRoot = Path.Combine(_env.WebRootPath ?? "wwwroot", "uploads", "defects", id.ToString());
+            if (!Directory.Exists(uploadRoot))
+                Directory.CreateDirectory(uploadRoot);
+
+            var savedPaths = new List<string>();
+
+            foreach (var file in files)
+            {
+                if (file.Length <= 0) continue;
+
+                var ext = Path.GetExtension(file.FileName);
+                var safeName = $"{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}-{Path.GetFileNameWithoutExtension(file.FileName)}{ext}";
+                var fullPath = Path.Combine(uploadRoot, safeName);
+
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                var relativePath = $"/uploads/defects/{id}/{safeName}";
+                defect.AttachmentPaths.Add(relativePath);
+                savedPaths.Add(relativePath);
+            }
+
+            _context.Defects.Update(defect);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Файлы загружены", paths = savedPaths });
+        }
+
+        [HttpGet("{id}/attachments")]
+        [Authorize]
+        public async Task<IActionResult> GetAttachments(int id)
+        {
+            var defect = await _context.Defects
+                .AsNoTracking()
+                .FirstOrDefaultAsync(d => d.Id == id);
+
+            if (defect == null) return NotFound();
+
+            return Ok(defect.AttachmentPaths ?? new List<string>());
+        }
+
+        [HttpGet("{id}/attachments/{fileName}")]
+        public IActionResult GetAttachmentFile(int id, string fileName)
+        {
+            var folder = Path.Combine(_env.WebRootPath ?? "wwwroot", "uploads", "defects", id.ToString());
+            var fullPath = Path.Combine(folder, fileName);
+
+            if (!System.IO.File.Exists(fullPath))
+                return NotFound();
+
+            var mime = "application/octet-stream";
+            return PhysicalFile(fullPath, mime, enableRangeProcessing: true);
         }
 
         private static object MapDefectToListItem(Defect d) => new

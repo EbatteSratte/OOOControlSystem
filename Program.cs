@@ -52,9 +52,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<AuthService>();
-builder.Services.AddControllers();
 
 var app = builder.Build();
+app.UseStaticFiles();
 
 using (var scope = app.Services.CreateScope())
 {

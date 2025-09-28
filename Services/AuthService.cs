@@ -16,7 +16,7 @@ namespace OOOControlSystem.Services
             _tokenService = tokenService;
         }
 
-        public async Task<string> Register(RegisterDto registerDto, UserRole role = UserRole.Сustomer)
+        public async Task<string> Register(RegisterDto registerDto, UserRole role = UserRole.Customer)
         {
             if (await _context.Users.AnyAsync(u => u.Email == registerDto.Email))
                 throw new Exception("Пользователь с таким email уже существует");

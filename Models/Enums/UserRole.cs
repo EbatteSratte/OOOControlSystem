@@ -4,6 +4,6 @@
     {
         Engineer,
         Manager,
-        Сustomer
+        Customer
     }
 }
