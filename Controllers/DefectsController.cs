@@ -20,7 +20,7 @@ namespace OOOControlSystem.Controllers
         }
 
         // GET: api/defects
-        [Authorize(Roles = "Manager,Engineer")]
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetDefects(
         [FromQuery] int? projectId,
@@ -84,7 +84,7 @@ namespace OOOControlSystem.Controllers
         }
 
         // GET: api/defects/{id}
-        //[Authorize(Roles = "Manager,Engineer")]
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetDefect(int id)
         {
@@ -103,7 +103,7 @@ namespace OOOControlSystem.Controllers
         }
 
         // POST: api/defects
-        //[Authorize(Roles = "Engineer")]
+        [Authorize(Roles = "Engineer")]
         [HttpPost]
         public async Task<IActionResult> CreateDefect([FromBody] DefectCreateDto dto)
         {
@@ -154,7 +154,7 @@ new Defect.DefectHistoryEntry{ Status = DefectStatus.New, ChangedAt = DateTime.U
         }
 
         [HttpPut("{id}")]
-        //[Authorize(Roles = "Engineer")]
+        [Authorize(Roles = "Engineer")]
         public async Task<IActionResult> UpdateDefect(int id, [FromBody] DefectUpdateDto dto)
         {
             var currentUserId = int.Parse(User.FindFirst("userId")!.Value);
@@ -190,7 +190,7 @@ new Defect.DefectHistoryEntry{ Status = DefectStatus.New, ChangedAt = DateTime.U
         }
 
         [HttpPut("{id}/status")]
-        //[Authorize(Roles = "Engineer")]
+        [Authorize(Roles = "Engineer")]
         public async Task<IActionResult> ChangeStatus(int id, [FromBody] DefectStatusDto dto)
         {
             var currentUserId = int.Parse(User.FindFirst("userId")!.Value);
@@ -241,7 +241,6 @@ new Defect.DefectHistoryEntry{ Status = DefectStatus.New, ChangedAt = DateTime.U
 
             defect.AssignedToId = dto.AssignedToId;
             defect.UpdatedAt = DateTime.UtcNow;
-            AppendHistory(defect, defect.Status, currentUserId, currentUserName);
 
 
             await _context.SaveChangesAsync();
@@ -249,7 +248,7 @@ new Defect.DefectHistoryEntry{ Status = DefectStatus.New, ChangedAt = DateTime.U
         }
 
         [HttpDelete("{id}")]
-        //[Authorize(Roles = "Engineer")]
+        [Authorize(Roles = "Engineer")]
         public async Task<IActionResult> DeleteDefect(int id)
         {
             var defect = await _context.Defects.FindAsync(id);
@@ -260,56 +259,8 @@ new Defect.DefectHistoryEntry{ Status = DefectStatus.New, ChangedAt = DateTime.U
             await _context.SaveChangesAsync();
             return Ok(new { Message = "Дефект удалён" });
         }
-        /*
-        [HttpPost("{id}/photos")]
-        [RequestSizeLimit(50_000_000)]
-        public async Task<IActionResult> UploadPhotos(int id, [FromForm] List<IFormFile> files)
-        {
-            var defect = await _context.Defects.FindAsync(id);
-            if (defect == null)
-                return NotFound(new { Message = "Дефект не найден" });
-
-            if (files == null || files.Count == 0)
-                return BadRequest(new { Message = "Файлы не переданы" });
-
-            var allowedExt = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-        { ".png", ".jpg", ".jpeg", ".gif", ".webp" };
-
-            var uploadsRoot = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "defects", id.ToString());
-            Directory.CreateDirectory(uploadsRoot);
-
-            var savedUrls = new List<string>();
-            foreach (var file in files)
-            {
-                if (file.Length <= 0) continue;
-
-                var ext = Path.GetExtension(file.FileName);
-                if (!allowedExt.Contains(ext))
-                    return BadRequest(new { Message = $"Недопустимый тип файла: {ext}" });
-
-                var uniqueName = $"{Guid.NewGuid():N}{ext}";
-                var absPath = Path.Combine(uploadsRoot, uniqueName);
-
-                using (var stream = System.IO.File.Create(absPath))
-                    await file.CopyToAsync(stream);
-
-                var relUrl = $"/uploads/defects/{id}/{uniqueName}";
-                savedUrls.Add(relUrl);
-            }
-
-            var current = defect.AttachmentPaths?.ToList() ?? new List<string>();
-            foreach (var url in savedUrls)
-                if (!current.Contains(url)) current.Add(url);
-            defect.AttachmentPaths = current;
-
-            defect.UpdatedAt = DateTime.UtcNow;
-            await _context.SaveChangesAsync();
-
-            return Ok(new { Message = "Фото загружены", Files = savedUrls });
-        }
-        */
         [HttpPost("{id}/attachments")]
-        [Authorize(Roles = "Manager,Engineer")]
+        [Authorize(Roles = "Engineer")]
         public async Task<IActionResult> UploadAttachments(int id, [FromForm] List<IFormFile> files)
         {
             var defect = await _context.Defects.FindAsync(id);

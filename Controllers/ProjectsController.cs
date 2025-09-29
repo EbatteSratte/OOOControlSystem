@@ -18,7 +18,7 @@ namespace OOOControlSystem.Controllers
         }
 
         // GET: api/projects
-        [Authorize(Roles = "Manager,Engineer")]
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult> GetProjects()
         {
