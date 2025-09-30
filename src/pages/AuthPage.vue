@@ -64,7 +64,7 @@ async function submit(){
     }
     router.push(auth.user?.role==='Manager' ? '/manager' : '/engineer')
   }catch(e){
-    error.value = e?.response?.data?.message || e?.response?.data?.Message || 'Пароли не совпадают'
+    error.value = e?.response?.data?.message || e?.response?.data?.Message || 'Ошибка'
   }finally{
     loading.value=false
   }
