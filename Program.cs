@@ -5,10 +5,29 @@ using Npgsql;
 using OOOControlSystem;
 using OOOControlSystem.Middleware;
 using OOOControlSystem.Services;
+using System.Diagnostics;
+using System.Net;
 using System.Text;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
+builder.Logging.Configure(o =>
+{
+    o.ActivityTrackingOptions =
+        ActivityTrackingOptions.TraceId |
+        ActivityTrackingOptions.SpanId |
+        ActivityTrackingOptions.ParentId |
+        ActivityTrackingOptions.Baggage |
+        ActivityTrackingOptions.Tags;
+});
+
+
+builder.Services.AddProblemDetails();
+builder.Services.AddControllers();
+
 
 var cs = builder.Configuration.GetConnectionString("DefaultConnection");
 var dsb = new NpgsqlDataSourceBuilder(cs);
@@ -55,7 +74,41 @@ builder.Services.AddScoped<AuthService>();
 
 var app = builder.Build();
 app.UseStaticFiles();
+app.Use(async (ctx, next) =>
+{
+    var sw = Stopwatch.StartNew();
+    try
+    {
+        await next();
+        sw.Stop();
 
+        var ip = ctx.Connection.RemoteIpAddress;
+        if (ip != null)
+        {
+            if (ip.IsIPv4MappedToIPv6) ip = ip.MapToIPv4();
+            else if (ip.Equals(IPAddress.IPv6Loopback)) ip = IPAddress.Loopback;
+        }
+
+        var log = ctx.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger("HttpRequest");
+        log.LogInformation("HTTP {Method} {Path} from {ClientIp} => {Status} in {Elapsed} ms",
+            ctx.Request.Method, ctx.Request.Path, ip?.ToString(), ctx.Response.StatusCode, sw.ElapsedMilliseconds);
+    }
+    catch (Exception ex)
+    {
+        sw.Stop();
+        var ip = ctx.Connection.RemoteIpAddress;
+        if (ip != null)
+        {
+            if (ip.IsIPv4MappedToIPv6) ip = ip.MapToIPv4();
+            else if (ip.Equals(IPAddress.IPv6Loopback)) ip = IPAddress.Loopback;
+        }
+
+        var log = ctx.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger("HttpRequest");
+        log.LogError(ex, "HTTP {Method} {Path} from {ClientIp} crashed after {Elapsed} ms",
+            ctx.Request.Method, ctx.Request.Path, ip?.ToString(), sw.ElapsedMilliseconds);
+        throw;
+    }
+});
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
