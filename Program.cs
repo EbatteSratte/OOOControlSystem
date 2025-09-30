@@ -14,6 +14,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
+builder.Services.AddCors(o =>
+{
+    o.AddPolicy("Spa", p => p
+        .WithOrigins("http://localhost:5173")
+        .WithMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+        .WithHeaders("Authorization", "Content-Type")
+        .DisallowCredentials());
+});
+
 builder.Logging.Configure(o =>
 {
     o.ActivityTrackingOptions =
@@ -73,6 +82,7 @@ builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<AuthService>();
 
 var app = builder.Build();
+app.UseCors("Spa");
 app.UseStaticFiles();
 app.Use(async (ctx, next) =>
 {
