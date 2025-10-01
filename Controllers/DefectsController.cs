@@ -313,7 +313,6 @@ new Defect.DefectHistoryEntry{ Status = DefectStatus.New, ChangedAt = DateTime.U
         }
 
         [HttpGet("{id}/attachments/{fileName}")]
-        [Authorize]
         public IActionResult GetAttachmentFile(int id, string fileName)
         {
             var folder = Path.Combine(_env.WebRootPath ?? "wwwroot", "uploads", "defects", id.ToString());
