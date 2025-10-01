@@ -1,0 +1,14 @@
+**/bin/
+**/obj/
+.vs/
+*.user
+*.suo
+*.pdb
+*.cache
+*.mdb
+*.log
+**/Properties/launchSettings.json
+# keep source; ignore local publish outputs
+/out/
+node_modules/
+dist/

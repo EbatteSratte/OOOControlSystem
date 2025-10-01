@@ -1,0 +1,27 @@
+# --- Versions / names ---
+POSTGRES_MAJOR=16
+DB_CONTAINER_NAME=ooo_db
+BACKEND_CONTAINER_NAME=ooo_backend
+FRONTEND_CONTAINER_NAME=ooo_frontend
+
+# --- Ports on host ---
+DB_PORT_HOST=5432
+BACKEND_PORT_HOST=8080
+FRONTEND_PORT_HOST=5173
+
+# --- Postgres ---
+POSTGRES_DB=app
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=makpostgress1028
+
+# --- ASP.NET Core ---
+ASPNETCORE_ENVIRONMENT=Production
+ASPNETCORE_URLS=http://0.0.0.0:8080
+
+# --- Connection string ---
+ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=app;Username=postgres;Password=postgres
+
+# --- JWT ---
+Jwt__Audience=ControlSystemApp
+Jwt__Issuer=OOOControlSystem
+Jwt__Key=
