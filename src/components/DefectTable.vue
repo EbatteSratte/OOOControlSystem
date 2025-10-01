@@ -321,8 +321,6 @@ function asAttachmentUrl(p){
   // absolute URL
   if (/^https?:\/\//i.test(s)) return s
   // static uploads path from backend
-  if (s.startsWith('/uploads/')) return `${API_BASE}${s}`
-  if (s.startsWith('uploads/')) return `${API_BASE}/${s}`
   // fallback to API download route
   const fname = s.split('/').pop()
   return `${API_BASE}/api/defects/${defect.value.id}/attachments/${encodeURIComponent(fname)}`
