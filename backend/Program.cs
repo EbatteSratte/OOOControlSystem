@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using OOOControlSystem.Models;
+using OOOControlSystem.Models.Enums;
 using Npgsql;
 using OOOControlSystem;
 using OOOControlSystem.Middleware;
@@ -24,14 +26,11 @@ builder.Logging.Configure(o =>
         ActivityTrackingOptions.Tags;
 });
 
-
 builder.Services.AddProblemDetails();
 builder.Services.AddControllers();
 
-
 var cs = builder.Configuration.GetConnectionString("DefaultConnection");
 var dsb = new NpgsqlDataSourceBuilder(cs);
-
 dsb.EnableDynamicJson();
 var dataSource = dsb.Build();
 
@@ -42,6 +41,7 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
+// Оставляем только AllowAll без Spa
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -52,7 +52,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new Exception("Jwt:Key �� ������ � ������������");
+var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new Exception("Jwt:Key не найден в конфигурации");
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -73,8 +73,10 @@ builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<AuthService>();
 
 var app = builder.Build();
-app.UseCors("Spa");
+
 app.UseStaticFiles();
+
+// Логирование HTTP-запросов (как было)
 app.Use(async (ctx, next) =>
 {
     var sw = Stopwatch.StartNew();
@@ -110,16 +112,37 @@ app.Use(async (ctx, next) =>
         throw;
     }
 });
+
+// Миграции БД (как было)
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
     dbContext.Database.Migrate();
+    const string seedEmail = "manager@example.com";
+    var plainPassword = "manager";
+    var exists = dbContext.Users.Any(u => u.Email == seedEmail);
+    if (!exists)
+    {
+        var hash = BCrypt.Net.BCrypt.HashPassword(plainPassword);
+        dbContext.Users.Add(new User
+        {
+            Email = seedEmail,
+            PasswordHash = hash,
+            FullName = "Manager",
+            Role = UserRole.Manager,
+            IsActive = true
+        });
+        dbContext.SaveChanges();
+    }
 }
 
+// Единственный CORS
 app.UseCors("AllowAll");
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllers();
-app.UseMiddleware<TokenValidationMiddleware>();
 
+app.UseAuthentication();
+// Твой middleware проверки токена — между аутентификацией и авторизацией
+app.UseMiddleware<TokenValidationMiddleware>();
+app.UseAuthorization();
+
+app.MapControllers();
 app.Run();

@@ -14,6 +14,7 @@
   </div>
 </template>
 <script setup>
+import { buildImageUrl } from '@/utils/imageUrl'
 import { ref } from 'vue'
 import api from '../api'
 const props = defineProps({ defectId: Number, items: Array, allowUpload: Boolean })

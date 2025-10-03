@@ -3,14 +3,14 @@
     <div class="row" style="justify-content:space-between;align-items:center">
       <h2 class="section-title">Дефекты</h2>
       <div class="row tools" style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;">
-  <input v-model="searchQuery" @input="onSearchInput" placeholder="Поиск: название/описание" class="input" style="min-width:260px;flex:1 1 320px;" />
-  <select class="select" v-model.number="projectFilter" style="min-width:220px;">
-    <option :value="null">Все проекты</option>
-    <option v-for="p in projectOptions" :key="p.id" :value="p.id">#{{ p.id }} — {{ p.name }}</option>
-  </select>
-  <button v-if="!manager" class="btn" type="button" @click.prevent="showCreate=true">Создать</button>
-  <button class="btn secondary" @click="load">Обновить</button>
-</div>
+        <input v-model="searchQuery" @input="onSearchInput" placeholder="Поиск: название/описание" class="input" style="min-width:260px;flex:1 1 320px;" />
+        <select class="select" v-model.number="projectFilter" style="min-width:220px;">
+          <option :value="null">Все проекты</option>
+          <option v-for="p in projectOptions" :key="p.id" :value="p.id">#{{ p.id }} — {{ p.name }}</option>
+        </select>
+        <button v-if="!manager" class="btn" type="button" @click.prevent="showCreate=true">Создать</button>
+        <button class="btn secondary" @click="load">Обновить</button>
+      </div>
     </div>
 
     <table class="table">
@@ -33,19 +33,19 @@
           <td>{{ d.status }}</td>
           <td>{{ d.priority }}</td>
           <td>{{ d.assignedTo?.fullName || '—' }}</td>
-          <td class="row right">            <button class="btn ghost" @click="openInfo(d.id)">Информация</button>
-<template v-if="!hideActions">
-
-            <button v-if="manager && allowAssign" class="btn secondary" @click="openAssign(d)">Назначить</button>
-            <button v-if="canEdit" class="btn" @click="openEdit(d)">Редактировать</button>
-            <button v-if="allowDelete" class="btn danger" @click="deleteDefect(d)">Удалить</button>
-            <button v-if="canChangeStatus" class="btn secondary" @click="openStatus(d)">Изменить статус</button>
-          
-</template>
-</td>
+          <td class="row right">
+            <button class="btn ghost" @click="openInfo(d.id)">Информация</button>
+            <template v-if="!hideActions">
+              <button v-if="manager && allowAssign" class="btn secondary" @click="openAssign(d)">Назначить</button>
+              <button v-if="canEdit" class="btn" @click="openEdit(d)">Редактировать</button>
+              <button v-if="allowDelete" class="btn danger" @click="deleteDefect(d)">Удалить</button>
+              <button v-if="canChangeStatus" class="btn secondary" @click="openStatus(d)">Изменить статус</button>
+            </template>
+          </td>
         </tr>
       </tbody>
     </table>
+
     <Modal v-if="showCreate" title="Новый дефект" @close="showCreate=false">
       <div class="form-body" style="--field-w:280px">
         <div style="width:100%">
@@ -79,7 +79,6 @@
       </div>
     </Modal>
 
-
     <!-- Информация -->
     <Modal v-if="infoId" title="Информация о дефекте" @close="infoId=null">
       <div v-if="defect" class="grid cols-2">
@@ -96,19 +95,10 @@
         <div><b>Обновлено:</b> {{ fmt(defect.updatedAt) }}</div>
 
         <div class="col-2">
-          <b>История:</b>
-          <ul>
-            <li v-for="(h,idx) in (defect.history || [])" :key="idx">
-              {{ fmt(h.changedAt) }} — {{ h.status }} — {{ h.description }} (by #{{ h.changedById }})
-            </li>
-          </ul>
-        </div>
-
-        <div class="col-2">
           <b>Фото:</b>
-          <div class="gallery" v-if="(defect.attachmentPaths||[]).length">
-            <a v-for="(p,idx) in defect.attachmentPaths" :key="idx" :href="asAttachmentUrl(p)" target="_blank" rel="noopener noreferrer">
-              <img class="thumb" :src="asAttachmentUrl(p)" />
+          <div class="gallery" v-if="attachmentUrls.length">
+            <a v-for="(it,idx) in attachmentUrls" :key="idx" :href="it.url" target="_blank" rel="noopener noreferrer">
+              <img class="thumb" :src="it.url" />
             </a>
           </div>
           <div v-else>Нет фото</div>
@@ -126,7 +116,8 @@
     </Modal>
 
     <!-- Редактирование -->
-    <Modal v-if="edit" title="Редактировать дефект" cardClass="form-shell" @close="edit=null"><div class="form-body" style="--field-w:280px">
+    <Modal v-if="edit" title="Редактировать дефект" cardClass="form-shell" @close="edit=null">
+      <div class="form-body" style="--field-w:280px">
         <div class="col-2"><label>Заголовок</label><input class="input" v-model="edit.title" /></div>
         <div class="col-2"><label>Описание</label><textarea class="input" v-model="edit.description" /></div>
         <div><label>Приоритет</label>
@@ -140,7 +131,8 @@
     </Modal>
 
     <!-- Изменение статуса -->
-    <Modal v-if="statusEdit" title="Изменить статус" cardClass="form-shell" @close="statusEdit=null"><div class="form-body" style="--field-w:280px">
+    <Modal v-if="statusEdit" title="Изменить статус" cardClass="form-shell" @close="statusEdit=null">
+      <div class="form-body" style="--field-w:280px">
         <div><label>Статус</label>
           <select class="select" v-model="statusEdit.status">
             <option>New</option>
@@ -161,19 +153,22 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch, computed } from 'vue'
 import api from '../api'
 import Modal from './Modal.vue'
 import AssignEngineer from './AssignEngineer.vue'
 import ProjectSelect from './ProjectSelect.vue'
 import { fmtDate as fmt } from '../utils/format'
-const API_BASE = import.meta.env.VITE_API_BASE || ''
+import { useAuthStore } from '../stores/auth'
+
+const auth = (() => { try { return useAuthStore() } catch { return null } })()
+
 const showCreate = ref(false)
 const creating = ref(false)
 const createError = ref('')
+const projects = ref([])
 const projectOptions = computed(() => projects.value)
 const createModel = ref({ title: '', description: '', projectId: null, priority: 'Medium', dueDateLocal: '' })
-const projects = ref([])
 const projectFilter = ref(null)
 
 const props = defineProps({
@@ -187,10 +182,10 @@ const props = defineProps({
   assignedOnly: { type: Boolean, default: false },
   allowUpload: { type: Boolean, default: false },
 })
+
 const searchQuery = ref('')
 let searchDebounce = null
 function onSearchInput(){ clearTimeout(searchDebounce); searchDebounce = setTimeout(() => load(), 300) }
-
 
 const items = ref([])
 const infoId = ref(null)
@@ -201,13 +196,24 @@ const assignModal = ref(null)
 const filesToUpload = ref([])
 const uploading = ref(false)
 
+// blob-URL'ы для вложений текущего дефекта
+const attachmentUrls = ref([]) // [{ name, url }]
+
+// очистка blob-URL'ов
+function clearAttachmentUrls(){
+  for (const it of attachmentUrls.value) {
+    try { URL.revokeObjectURL(it.url) } catch {}
+  }
+  attachmentUrls.value = []
+}
+onBeforeUnmount(clearAttachmentUrls)
+
 function toLocalIso(iso) {
   if (!iso) return ''
   const dt = new Date(iso)
   const tz = new Date(dt.getTime() - dt.getTimezoneOffset()*60000)
   return tz.toISOString().slice(0,16)
 }
-
 
 async function createDefect(){
   creating.value = true; createError.value=''
@@ -231,8 +237,8 @@ async function createDefect(){
     creating.value = false
   }
 }
+
 async function load() {
-  // Customer owned defects aggregation
   if (props.customerOwnedOnly) {
     try {
       const { data: profile } = await api.get('/users/get-profile')
@@ -243,27 +249,26 @@ async function load() {
         if (!pid) continue
         const { data } = await api.get(`/projects/${pid}`)
         for (const d of (data?.defects || [])) {
-        const mapped = {
-          id: d.id ?? d.Id,
-          title: d.title ?? d.Title,
-          description: d.description ?? d.Description,
-          status: d.status ?? d.Status,
-          priority: d.priority ?? d.Priority,
-          project: { id: (data.id ?? data.Id), name: (data.name ?? data.Name) },
-          reporter: d.reporter ?? d.Reporter,
-          assignedTo: d.assignedTo ?? d.AssignedTo,
-          dueDate: d.dueDate ?? d.DueDate,
-          createdAt: d.createdAt ?? d.CreatedAt,
-          updatedAt: d.updatedAt ?? d.UpdatedAt
+          const mapped = {
+            id: d.id ?? d.Id,
+            title: d.title ?? d.Title,
+            description: d.description ?? d.Description,
+            status: d.status ?? d.Status,
+            priority: d.priority ?? d.Priority,
+            project: { id: (data.id ?? data.Id), name: (data.name ?? data.Name) },
+            reporter: d.reporter ?? d.Reporter,
+            assignedTo: d.assignedTo ?? d.AssignedTo,
+            dueDate: d.dueDate ?? d.DueDate,
+            createdAt: d.createdAt ?? d.CreatedAt,
+            updatedAt: d.updatedAt ?? d.UpdatedAt
+          }
+          agg.push(mapped)
         }
-        agg.push(mapped)
-      }
       }
       items.value = agg
       return
     } catch (e) { console.error('Failed to load customer-owned defects', e) }
   }
-  // General list (Manager/Engineer). Support assignedOnly filter
   const params = {}
   if (projectFilter.value != null) params.projectId = projectFilter.value
   if (props.assignedOnly) {
@@ -278,16 +283,42 @@ async function load() {
 }
 
 function openInfo(id){ infoId.value = id; reloadDefect() }
+
 async function reloadDefect(){
   if (!infoId.value) return;
   defect.value = null;
+  clearAttachmentUrls()
   try {
     const { data } = await api.get(`/defects/${infoId.value}`)
     defect.value = data
+    await loadAttachmentBlobs() // <-- после получения дефекта грузим картинки как blob
   } catch (e) {
     console.error('[DefectTable] load details failed', e)
     defect.value = { id: infoId.value, title: 'Ошибка загрузки', description: 'Нет доступа или сервер вернул ошибку', attachmentPaths: [], history: [] }
   }
+}
+
+// грузим blob'ы вложений с токеном в Authorization (интерцептор или явный заголовок)
+async function loadAttachmentBlobs(){
+  clearAttachmentUrls()
+  const paths = (defect.value?.attachmentPaths || []).slice()
+  if (!paths.length) return
+
+  // возможен интерцептор, но добавим явный Authorization на случай его отсутствия
+  const token = (auth && auth.token) || localStorage.getItem('token') || localStorage.getItem('auth_token') || ''
+  const hdrs = token ? { Authorization: `Bearer ${token}` } : {}
+
+  await Promise.all(paths.map(async p => {
+    try {
+      const fname = String(p).split('/').pop() || ''
+      const urlPath = `/defects/${defect.value.id}/attachments/${encodeURIComponent(fname)}`
+      const resp = await api.get(urlPath, { responseType: 'blob', headers: hdrs })
+      const url = URL.createObjectURL(resp.data)
+      attachmentUrls.value.push({ name: fname, url })
+    } catch (e) {
+      console.warn('Failed to load attachment blob', p, e)
+    }
+  }))
 }
 
 function openEdit(row){
@@ -306,28 +337,11 @@ async function saveStatus(){ const s = statusEdit.value; await api.put(`/defects
 
 function openAssign(row){ assignModal.value = { id: row.id, assigneeId: row.assignedTo?.id ?? null } }
 async function onAssigned(){ assignModal.value=null; await load(); if (infoId.value) await reloadDefect() }
-async function deleteDefect(row){
-  if (!confirm(`Удалить дефект #${row.id}? Это действие необратимо.`)) return;
-  try { await api.delete(`/defects/${row.id}`); if (infoId.value === row.id) infoId.value = null; await load() }
-  catch(e){ alert("Не удалось удалить дефект: " + (e?.response?.data?.title || e.message)) }
-}
 
-
-function asAttachmentUrl(p){
-  if (!defect.value) return '#'
-  if (!p) return '#'
-  // normalize backslashes -> forward slashes
-  let s = String(p).replace(/\\/g, '/')
-  // absolute URL
-  if (/^https?:\/\//i.test(s)) return s
-  // static uploads path from backend
-  // fallback to API download route
-  const fname = s.split('/').pop()
-  return `/defects/${defect.value.id}/attachments/${encodeURIComponent(fname)}`
-}
 function onFilesPicked(ev){
   filesToUpload.value = Array.from(ev.target.files || [])
 }
+
 async function uploadFiles(){
   if (!infoId.value || filesToUpload.value.length===0) return
   const form = new FormData()
@@ -369,14 +383,11 @@ function openCreate(){
 }
 </script>
 
-
 <style>
 .tools { display:flex; align-items:center; gap:8px; flex-wrap:nowrap; white-space:nowrap; }
 .btn.danger { background: var(--danger); color: #fff; }
 .input { padding:8px 10px; border:1px solid var(--border); border-radius: var(--radius-sm); }
-
 .table td.row{ display:flex; gap:8px; align-items:center; justify-content:flex-end; flex-wrap:nowrap; }
-
 .create-modal .modal__card{width:420px;max-width:none;padding:0}
 .table td.row{ display:flex; gap:8px; align-items:center; justify-content:flex-end; flex-wrap:nowrap; }
 </style>
