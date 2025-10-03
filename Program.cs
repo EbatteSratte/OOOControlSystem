@@ -4,6 +4,8 @@ using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using OOOControlSystem;
 using OOOControlSystem.Middleware;
+using OOOControlSystem.Models;
+using OOOControlSystem.Models.Enums;
 using OOOControlSystem.Services;
 using System.Diagnostics;
 using System.Net;
@@ -123,6 +125,22 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
     dbContext.Database.Migrate();
+    const string seedEmail = "manager@example.com";
+    var plainPassword = "manager";
+    var exists = dbContext.Users.Any(u => u.Email == seedEmail);
+    if (!exists)
+    {
+        var hash = BCrypt.Net.BCrypt.HashPassword(plainPassword);
+        dbContext.Users.Add(new User
+        {
+            Email = seedEmail,
+            PasswordHash = hash,
+            FullName = "Manager",
+            Role = UserRole.Manager,
+            IsActive = true
+        });
+        dbContext.SaveChanges();
+    }
 }
 
 app.UseCors("AllowAll");
