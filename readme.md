@@ -1,4 +1,3 @@
-# OOO Frontend Full v6
 Запуск:
 ```bash
 npm install
